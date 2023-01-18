@@ -4,7 +4,7 @@ on:
   workflow_dispatch
 
 jobs:
-  deploy-service-accounts-dev:
+  deploy-datasets-dev:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
