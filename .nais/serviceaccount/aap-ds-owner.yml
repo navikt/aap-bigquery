@@ -1,6 +1,9 @@
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMServiceAccount
 metadata:
+  namespace: aap
+  labels:
+    team: aap
   annotations:
     cnrm.cloud.google.com/project-id: {{project}}
   name: aap-ds-owner
