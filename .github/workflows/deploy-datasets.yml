@@ -1,0 +1,17 @@
+name: Deploy Bigquery Service accounts
+
+on:
+  workflow_dispatch
+
+jobs:
+  deploy-service-accounts-dev:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/dataset/vedtak-dataset.yml
+          VAR: project=aap-dev-e48b
+          PRINT_PAYLOAD: true

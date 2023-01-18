@@ -1,0 +1,17 @@
+apiVersion: bigquery.cnrm.cloud.google.com/v1beta1
+kind: BigQueryDataset
+metadata:
+  namespace: aap
+  labels:
+    team: aap
+  annotations:
+    cnrm.cloud.google.com/delete-contents-on-destroy: "true"
+  name: vedtakdataset
+spec:
+  defaultTableExpirationMs: 3600000
+  description: "Dataset for vedtaksinformasjon"
+  friendlyName: vedtak-dataset
+  location: europe-north1
+  access:
+    - role: OWNER
+      userByEmail: aap-ds-owner@{{project}}.iam.gserviceaccount.com
