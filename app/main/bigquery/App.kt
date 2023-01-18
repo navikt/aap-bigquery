@@ -1,0 +1,4 @@
+package bigquery
+
+class App {
+}
