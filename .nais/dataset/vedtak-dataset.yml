@@ -6,6 +6,7 @@ metadata:
     team: aap
   annotations:
     cnrm.cloud.google.com/delete-contents-on-destroy: "true"
+    cnrm.cloud.google.com/project-id: {{project}}
   name: vedtakdataset
 spec:
   defaultTableExpirationMs: 3600000
