@@ -12,3 +12,5 @@ kafka:
       - team: aap
         application: kafka-cli
         access: readwrite
+gcp:
+  project: aap-dev-e48b
