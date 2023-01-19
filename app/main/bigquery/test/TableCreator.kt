@@ -38,7 +38,7 @@ class TableCreator(
             val schema = requireNotNull(def.schema) { "Schema ikke funnet" }
             val fields = schema.fields
             val newField = Field.newBuilder(colname, StandardSQLTypeName.STRING)
-                .setDescription("Hmm").setMode(Field.Mode.NULLABLE).setDefaultValueExpression("Meh")
+                .setDescription("Hmm").setMode(Field.Mode.NULLABLE)
                 .build()
             val fieldlist = mutableListOf<Field>()
             fields.forEach(fieldlist::add)
