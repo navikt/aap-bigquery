@@ -43,14 +43,14 @@ fun Application.server(kafka: KStreams = KafkaStreams) {
         actuators(prometheus, kafka)
     }
 
-    /*
+
     val tableCreator = TableCreator(BigQueryOptions.newBuilder().setProjectId("aap-dev-e48b").build().service)
     tableCreator.createTable("test1table", Schema.of(
         Field.newBuilder("name", StandardSQLTypeName.STRING)
             .setDescription("Navn").build(),
         Field.newBuilder("rank", StandardSQLTypeName.INT64)
             .setDescription("Rangering").build()
-    ))*/
+    ))
 }
 
 internal fun topology(): Topology {
