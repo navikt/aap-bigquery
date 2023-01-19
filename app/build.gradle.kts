@@ -12,8 +12,11 @@ application {
 
 val aapLibsVersion = "3.5.39"
 val ktorVersion = "2.2.2"
+val bqVersion = "2.20.2"
 
 dependencies {
+    implementation("com.github.navikt:aap-vedtak:1.0.272")
+
     implementation("com.github.navikt.aap-libs:ktor-auth-azuread:$aapLibsVersion")
     implementation("com.github.navikt.aap-libs:kafka:$aapLibsVersion")
     implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibsVersion")
@@ -29,6 +32,8 @@ dependencies {
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
 
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
+
+    implementation("com.google.cloud:google-cloud-bigquery:$bqVersion")
 
     implementation("io.micrometer:micrometer-registry-prometheus:1.10.3")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.0")

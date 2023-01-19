@@ -39,3 +39,7 @@ spec:
     path: /actuator/metrics
   secureLogs:
     enabled: true
+  gcp:
+    bigQueryDatasets:
+      - name: code_test_ds
+        permission: READWRITE
