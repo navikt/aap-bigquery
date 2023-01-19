@@ -5,14 +5,42 @@ metadata:
   labels:
     team: aap
   annotations:
-    cnrm.cloud.google.com/delete-contents-on-destroy: "true"
-    cnrm.cloud.google.com/project-id: {{project}}
-  name: aapvedtakdataset
+    cnrm.cloud.google.com/delete-contents-on-destroy: "false"
+    cnrm.cloud.google.com/project-id: "aap-dev-e48b"
+  name: dataset-test
 spec:
-  defaultTableExpirationMs: 3600000
-  description: "Dataset for aap vedtaksinformasjon"
-  friendlyName: aap-vedtak-dataset
+  description: "Dataset test"
+  friendlyName: dataset-test
   location: europe-north1
-  access:
-    - role: OWNER
-      userByEmail: aap-ds-owner@{{project}}.iam.gserviceaccount.com
+  projectRef:
+    external: aap-dev-e48b
+  resourceID: dataset_test
+
+---
+
+apiVersion: bigquery.cnrm.cloud.google.com/v1beta1
+kind: BigQueryTable
+metadata:
+  annotations:
+    cnrm.cloud.google.com/project-id: "aap-dev-e48b"
+  name: table-test
+  namespace: aap
+  labels:
+    team: aap
+spec:
+  description: "Table test"
+  resourceID: table_test
+  datasetRef:
+    name: dataset-test
+  friendlyName: table-test
+  schema: |
+    [
+      {
+        "name": "deploySha",
+        "type": "STRING"
+      },
+      {
+        "name": "repo",
+        "type": "STRING"
+      }
+    ]
