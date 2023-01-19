@@ -31,4 +31,26 @@ class TableCreator(
         }
     }
 
+    fun addColumn(tableName: String, colname: String) {
+        try {
+            val table = requireNotNull(bigQuery.getTable(TableId.of(dataset, tableName))) { "Tabell finnes ikke" }
+            val def: StandardTableDefinition = table.getDefinition()
+            val schema = requireNotNull(def.schema) { "Schema ikke funnet" }
+            val fields = schema.fields
+            val newField = Field.newBuilder(colname, StandardSQLTypeName.STRING)
+                .setDescription("Hmm").setMode(Field.Mode.NULLABLE).setDefaultValueExpression("Meh")
+                .build()
+            val fieldlist = mutableListOf<Field>()
+            fields.forEach(fieldlist::add)
+            fieldlist.add(newField)
+            val newSchema = Schema.of(fieldlist)
+            val updatedTable = table.toBuilder().setDefinition(StandardTableDefinition.of(newSchema)).build()
+            updatedTable.update()
+            log.info("Table updated")
+        } catch (e : BigQueryException) {
+            log.error("Table was not updated.", e)
+            throw e
+        }
+    }
+
 }

@@ -51,6 +51,8 @@ fun Application.server(kafka: KStreams = KafkaStreams) {
         Field.newBuilder("rank", StandardSQLTypeName.INT64)
             .setDescription("Rangering").build()
     ))
+
+    tableCreator.addColumn("test1table", "another")
 }
 
 internal fun topology(): Topology {
