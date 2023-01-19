@@ -15,32 +15,3 @@ spec:
   projectRef:
     external: aap-dev-e48b
   resourceID: dataset_test
-
----
-
-apiVersion: bigquery.cnrm.cloud.google.com/v1beta1
-kind: BigQueryTable
-metadata:
-  annotations:
-    cnrm.cloud.google.com/project-id: "aap-dev-e48b"
-  name: table-test
-  namespace: aap
-  labels:
-    team: aap
-spec:
-  description: "Table test"
-  resourceID: table_test
-  datasetRef:
-    name: dataset-test
-  friendlyName: table-test
-  schema: |
-    [
-      {
-        "name": "deploySha",
-        "type": "STRING"
-      },
-      {
-        "name": "repo",
-        "type": "STRING"
-      }
-    ]
