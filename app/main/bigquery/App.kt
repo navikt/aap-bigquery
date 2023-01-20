@@ -1,11 +1,10 @@
 package bigquery
 
 import bigquery.kafka.Topics
-import bigquery.test.TableCreator
+import bigquery.tables.TableCreator
+import bigquery.tables.TableInserter
+import bigquery.tables.vedtak.v1.VedtakTable
 import com.google.cloud.bigquery.BigQueryOptions
-import com.google.cloud.bigquery.Field
-import com.google.cloud.bigquery.Schema
-import com.google.cloud.bigquery.StandardSQLTypeName
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.metrics.micrometer.*
@@ -16,6 +15,7 @@ import io.micrometer.prometheus.PrometheusMeterRegistry
 import no.nav.aap.kafka.streams.KStreams
 import no.nav.aap.kafka.streams.KafkaStreams
 import no.nav.aap.kafka.streams.extension.consume
+import no.nav.aap.kafka.streams.extension.filterNotNull
 import no.nav.aap.ktor.config.loadConfig
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
@@ -33,34 +33,31 @@ fun Application.server(kafka: KStreams = KafkaStreams) {
 
     install(MicrometerMetrics) { registry = prometheus }
 
+    val bigQuery = BigQueryOptions.newBuilder().setProjectId(config.bigquery.project).build().service
+    val tableCreator = TableCreator(bigQuery)
+    val tableInserter = TableInserter(bigQuery)
+
+    val vedtakTable = VedtakTable(tableCreator, tableInserter)
+
     kafka.connect(
         config = config.kafka,
         registry = prometheus,
-        topology = topology()
+        topology = topology(vedtakTable)
     )
 
     routing {
         actuators(prometheus, kafka)
     }
-
-
-    val tableCreator = TableCreator(BigQueryOptions.newBuilder().setProjectId("aap-dev-e48b").build().service)
-    tableCreator.createTable("test1table", Schema.of(
-        Field.newBuilder("name", StandardSQLTypeName.STRING)
-            .setDescription("Navn").build(),
-        Field.newBuilder("rank", StandardSQLTypeName.INT64)
-            .setDescription("Rangering").build()
-    ))
-
-    tableCreator.addColumn("test1table", "another")
 }
 
-internal fun topology(): Topology {
+internal fun topology(vedtakstable: VedtakTable): Topology {
     val streams = StreamsBuilder()
 
     streams
         .consume(Topics.vedtak)
-        .peek {_, value -> log.info("Recieved ${value?.vedtaksid}")}
+        .filterNotNull("skip-vedtak-tombstone")
+        .peek { _, value -> log.info("Recieved ${value?.vedtaksid}") }
+    // TODO: Insert objekt
 
     return streams.build()
 }

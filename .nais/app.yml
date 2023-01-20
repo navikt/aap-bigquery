@@ -43,3 +43,6 @@ spec:
     bigQueryDatasets:
       - name: code_test_ds
         permission: READWRITE
+  env:
+    - name: GCP_PROJECT
+      value: {{gcp.project}}
