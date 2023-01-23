@@ -16,12 +16,12 @@ fun Routing.actuators(prometheus: PrometheusMeterRegistry, kafka: KStreams) {
 
         get("/live") {
             val statusCode = if (kafka.isLive()) HttpStatusCode.OK else HttpStatusCode.InternalServerError
-            call.respond(statusCode, "personopplysninger")
+            call.respond(statusCode, "bigquery")
         }
 
         get("/ready") {
             val statusCode = if (kafka.isReady()) HttpStatusCode.OK else HttpStatusCode.InternalServerError
-            call.respond(statusCode, "personopplysninger")
+            call.respond(statusCode, "bigquery")
         }
     }
 }
