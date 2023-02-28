@@ -3,6 +3,7 @@ package bigquery
 import bigquery.kafka.Topics
 import bigquery.tables.TableCreator
 import bigquery.tables.TableInserter
+import bigquery.tables.vedtak.v1.BigQueryTable
 import bigquery.tables.vedtak.v1.VedtakTable
 import com.google.cloud.bigquery.BigQueryOptions
 import io.ktor.server.application.*
@@ -12,22 +13,17 @@ import io.ktor.server.netty.*
 import io.ktor.server.routing.*
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
-import no.nav.aap.kafka.streams.KStreams
-import no.nav.aap.kafka.streams.KafkaStreams
-import no.nav.aap.kafka.streams.extension.consume
-import no.nav.aap.kafka.streams.extension.filterNotNull
+import no.nav.aap.kafka.streams.v2.KStreams
+import no.nav.aap.kafka.streams.v2.KafkaStreams
+import no.nav.aap.kafka.streams.v2.Topology
+import no.nav.aap.kafka.streams.v2.topology
 import no.nav.aap.ktor.config.loadConfig
-import org.apache.kafka.streams.StreamsBuilder
-import org.apache.kafka.streams.Topology
-import org.slf4j.LoggerFactory
-
-private val log = LoggerFactory.getLogger("Main")
 
 fun main() {
     embeddedServer(Netty, port = 8080, module = Application::server).start(wait = true)
 }
 
-fun Application.server(kafka: KStreams = KafkaStreams) {
+fun Application.server(kafka: KStreams = KafkaStreams()) {
     val config = loadConfig<Config>()
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
 
@@ -50,14 +46,9 @@ fun Application.server(kafka: KStreams = KafkaStreams) {
     }
 }
 
-internal fun topology(vedtakstable: VedtakTable): Topology {
-    val streams = StreamsBuilder()
+internal fun topology(vedtakstable: BigQueryTable): Topology = topology {
 
-    streams
-        .consume(Topics.vedtak)
-        .filterNotNull("skip-vedtak-tombstone")
-        .peek { _, value -> log.info("Recieved ${value?.vedtaksid}") }
+        consume(Topics.vedtak)
+            .secureLog { value -> info("Received ${value.vedtaksid}") }
     // TODO: Insert objekt
-
-    return streams.build()
 }

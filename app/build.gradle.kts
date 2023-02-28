@@ -1,24 +1,23 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.8.0"
-    id("io.ktor.plugin") version "2.2.2"
-    application
+    kotlin("jvm") version "1.8.10"
+    id("io.ktor.plugin") version "2.2.3"
 }
 
 application {
     mainClass.set("bigquery.AppKt")
 }
 
-val aapLibsVersion = "3.5.39"
-val ktorVersion = "2.2.2"
+val aapLibsVersion = "3.6.9"
+val ktorVersion = "2.2.3"
 val bqVersion = "2.20.2"
 
 dependencies {
-    implementation("com.github.navikt:aap-vedtak:1.0.272")
+    implementation("com.github.navikt.aap-vedtak:kafka-dto:1.1.1")
 
     implementation("com.github.navikt.aap-libs:ktor-auth-azuread:$aapLibsVersion")
-    implementation("com.github.navikt.aap-libs:kafka:$aapLibsVersion")
+    implementation("com.github.navikt.aap-libs:kafka-2:$aapLibsVersion")
     implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibsVersion")
 
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
@@ -41,14 +40,13 @@ dependencies {
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:7.2")
 
     testImplementation(kotlin("test"))
-    testImplementation("com.github.navikt.aap-libs:kafka-test:$aapLibsVersion")
+    testImplementation("com.github.navikt.aap-libs:kafka-test-2:$aapLibsVersion")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
 }
 
 repositories {
     mavenCentral()
     maven("https://github-package-registry-mirror.gc.nav.no/cached/maven-release")
-//    maven("https://packages.confluent.io/maven/") // transitive avro dependency
 }
 
 tasks {

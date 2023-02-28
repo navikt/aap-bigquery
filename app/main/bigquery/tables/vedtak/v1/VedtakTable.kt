@@ -7,10 +7,12 @@ import com.google.cloud.bigquery.Schema
 import com.google.cloud.bigquery.StandardSQLTypeName
 import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto
 
+interface BigQueryTable
+
 class VedtakTable(
     tableCreator: TableCreator,
     private val tableInserter: TableInserter
-) {
+): BigQueryTable {
 
     private val datasetName = "code_test_ds"
     private val tableName = "vedtak_v1_test"
