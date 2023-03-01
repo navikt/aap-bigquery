@@ -9,7 +9,7 @@ application {
     mainClass.set("bigquery.AppKt")
 }
 
-val aapLibsVersion = "3.6.9"
+val aapLibsVersion = "3.6.20"
 val ktorVersion = "2.2.3"
 val bqVersion = "2.23.0"
 
