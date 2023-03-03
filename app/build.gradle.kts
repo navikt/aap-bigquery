@@ -10,7 +10,7 @@ application {
 }
 
 val aapLibsVersion = "3.6.20"
-val ktorVersion = "2.2.3"
+val ktorVersion = "2.2.4"
 val bqVersion = "2.23.0"
 
 dependencies {
